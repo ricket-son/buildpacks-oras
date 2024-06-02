@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+plan_path=$2
+
+if [[ "${BP_REQUIRES}" == *"oras"* ]]; then
+  cat >>"${plan_path}" <<EOL
+[[requires]]
+name = "oras"
+EOL
+fi

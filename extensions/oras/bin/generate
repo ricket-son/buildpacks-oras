@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+output_dir=$CNB_OUTPUT_DIR
+
+cat >> "${output_dir}/run.Dockerfile" <<EOL
+ARG base_image
+FROM \${base_image}
+
+USER root
+
+ARG VERSION
+ENV VERSION=\${VERSION:-1.1.0}
+
+RUN curl -LO "https://github.com/oras-project/oras/releases/download/v\${VERSION}/oras_\${VERSION}_linux_amd64.tar.gz" && \
+  tar -zxf oras_\${VERSION}_*.tar.gz -C /usr/local/bin && \ 
+  rm -rf oras_\${VERSION}_*.tar.gz
+
+ARG user_id
+USER \${user_id}
+EOL

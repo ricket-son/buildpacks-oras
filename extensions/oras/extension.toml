@@ -1,0 +1,8 @@
+api = "0.10"
+
+[extension]
+id = "ricket-son/oras-extension"
+version = "0.1.0"
+name = "ORAS Extension"
+homepage = "https://github.com/ricket-son/buildpacks-oras-extension"
+description = "An extension that installs oras on the run image"

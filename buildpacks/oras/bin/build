@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+echo "---> Oras Extensions Buildpack"
+
+layers_dir=$1
+
+cat >> "${layers_dir}/launch.toml" <<EOL
+[[processes]]
+type = "oras"
+command = ["oras"]
+EOL

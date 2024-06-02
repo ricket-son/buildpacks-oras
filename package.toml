@@ -1,0 +1,8 @@
+[platform]
+os = "linux"
+
+[buildpack]
+uri = "buildpacks/oras/"
+
+[extension]
+uri = "extensions/oras/"
