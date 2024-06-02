@@ -1,0 +1,50 @@
+name: Build and Publish
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    env:
+      GHCR_USER: ${{ secrets.GHCR_USER }}
+      GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - if: ${{ github.event_name != 'pull_request' || ! github.event.pull_request.head.repo.fork }}
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.GHCR_USER }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Set up pack CLI
+        run: |
+          curl -sSL "https://github.com/buildpacks/pack/releases/download/v0.34.1/pack-v0.34.1-linux.tgz" | sudo tar -C /usr/local/bin/ --no-same-owner -xzv pack
+
+      - name: Set tag
+        id: set-tag
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            echo "tag=latest" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Package buildpack
+        run: |
+          TAG=${{ steps.set-tag.outputs.tag }}
+          pack buildpack package --config ./package.toml --publish ghcr.io/ricket-son/oras:$TAG
+
+      - name: Package extension
+        run: |
+          TAG=${{ steps.set-tag.outputs.tag }}
+          pack extension package --config ./package.toml --publish ghcr.io/ricket-son/oras-extension:$TAG
