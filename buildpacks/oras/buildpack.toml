@@ -9,3 +9,6 @@ version = "0.1.0"
 name = "ORAS Extension Buildpack"
 homepage = "https://github.com/ricket-son/buildpacks-oras-extension"
 description = "A buildpack that includes oras-extension."
+
+[[stacks]]
+id = "*"
