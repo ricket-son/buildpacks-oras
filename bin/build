@@ -21,7 +21,7 @@ fi
 
 if [[ ${oras_path} != ${oras_source} ]]; then
   echo "---> Downloading and extracting ORAS ${oras_version}"
-  wget -q -O - "${oras_path}" | tar -zxf - -C "${oras_layer_dir}"
+  curl -sL "${oras_path}" | tar -zxf - -C "${oras_layer_dir}"
 
   mkdir -p ${oras_layer_dir}/env
   echo "${oras_layer_dir}:" > ${oras_layer_dir}/env/PATH.prepend
