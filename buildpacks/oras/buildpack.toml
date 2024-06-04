@@ -5,10 +5,10 @@ os = "linux"
 
 [buildpack]
 id = "ricket-son/oras"
-version = "0.1.0"
-name = "ORAS Extension Buildpack"
-homepage = "https://github.com/ricket-son/buildpacks-oras-extension"
-description = "A buildpack that includes oras-extension."
+version = "0.2.0"
+name = "ORAS Buildpack"
+homepage = "https://github.com/ricket-son/buildpacks-oras"
+description = "A buildpack that provides ORAS."
 
 [[stacks]]
 id = "*"

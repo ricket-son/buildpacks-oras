@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
+if [[ ! "${BP_REQUIRES}" == *"oras"* ]]; then
+  exit 0
+fi
+
 plan_path=$2
 
-if [[ "${BP_REQUIRES}" == *"oras"* ]]; then
-  cat >>"${plan_path}" <<EOL
+cat >>"${plan_path}" <<EOL
+[[provides]]
+name = "oras"
+
 [[requires]]
 name = "oras"
 EOL
-fi

@@ -1,9 +1,40 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-echo "---> Oras Extensions Buildpack"
+if [[ ! "${BP_REQUIRES}" == *"oras"* ]]; then
+  exit 0
+fi
+
+echo "---> ORAS Buildpack"
 
 layers_dir=$1
+
+oras_layer_dir="${layers_dir}/oras"
+mkdir -p "${oras_layer_dir}"
+
+oras_version="1.1.0"
+oras_path="https://github.com/oras-project/oras/releases/download/v${oras_version}/oras_${oras_version}_linux_amd64.tar.gz"
+
+if [[ -f ${oras_layer_dir}.toml ]]; then
+  oras_source=$(cat ${oras_layer_dir}.toml | grep source | awk '{print $3}' | tr -d '"' || echo "Source not found")
+fi
+
+if [[ ${oras_path} != ${oras_source} ]]; then
+  echo "---> Downloading and extracting ORAS ${oras_version}"
+  wget -q -O - "${oras_path}" | tar -zxf - -C "${oras_layer_dir}"
+
+  mkdir -p ${oras_layer_dir}/env
+  echo "${oras_layer_dir}:" > ${oras_layer_dir}/env/PATH.prepend
+fi
+
+cat > "${oras_layer_dir}.toml" <<EOL
+[types]
+launch = true
+cache = true
+[metadata]
+version = "${oras_version}"
+source = "${oras_path}"
+EOL
 
 cat >> "${layers_dir}/launch.toml" <<EOL
 [[processes]]

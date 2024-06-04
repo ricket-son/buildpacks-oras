@@ -8,24 +8,13 @@ Include this into your **builder.toml**
 ```toml
 [[buildpacks]]
   id = "ricket-son/oras"
-  version = "0.1.0"
-  uri = "ghcr.io/ricket-son/oras:0.1.0"
+  version = "0.2.0"
+  uri = "ghcr.io/ricket-son/oras:0.2.0"
 
 [[order]]
   [[order.group]]
     id = "ricket-son/oras"
-    version = "0.1.0"
-
-
-[[extensions]]
-  id = "ricket-son/oras-extension"
-  version = "0.1.0"
-  uri = "ghcr.io/ricket-son/oras-extension:0.1.0"
-
-[[order-extensions]]
-  [[order-extensions.group]]
-    id = "ricket-son/oras-extension"
-    version = "0.1.0"
+    version = "0.2.0"
 ```
 
 Include this into your build environment to include the Buildpack
